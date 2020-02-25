@@ -63,7 +63,7 @@ def exportLog():
         
 if __name__ == '__main__':
     colorama.init()
-    with open('conf/tables_replicate.csv') as csv_file:
+    with open('conf/replication_list_git.csv') as csv_file:
 
         csv_reader = csv.reader(csv_file, delimiter=';')
 

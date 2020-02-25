@@ -1,0 +1,4 @@
+database;schema;table_name;origin_server;target_server;selectQuery;deleteQuery
+dbcomercial;dbo;tb_pedido;192.168.1.123;192.168.1.321;;
+dbcomercial;dbo;tb_item_pedido;192.168.1.123;192.168.1.321;SELECT * FROM dbcomercial.dbo.tb_item_pedido AS tip WITH (NOLOCK) WHERE tip.Data >= CONVERT(DATE, GETDATE()-20);DELETE tip FROM dbcomercial.dbo.tb_item_pedido AS tip WITH (NOLOCK) WHERE tip.Data >= CONVERT(DATE, GETDATE()-20)
+dbcomercial;dbo;tb_cliente;192.168.1.123;192.168.1.321;SELECT * FROM dbcomercial.dbo.tb_cliente as ta WITH (NOLOCK);
