@@ -1,5 +1,6 @@
 import subprocess
 from typing import Optional
+from sys import platform
 
 _CREDENTIALS = r'''
     $SecurePassword = ConvertTo-SecureString "pyBBsd4C0ZhuciXQzNQZ" -AsPlainText -Force
@@ -51,7 +52,7 @@ def executeBulkInsert(origin_table: str,
 
     if origin_query is None or origin_query == '':        
         executable_cmdlet = cmdlet + r'''
-        Copy-DbaDbTableData -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -BatchSize 100000''' +truncate_opt+ '''
+        Copy-DbaDbTableData -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -KeepNulls -BatchSize 100000''' +truncate_opt+ '''
         '''
     else:
         cmdlet = cmdlet.replace('%origin_query%', origin_query)
@@ -59,8 +60,7 @@ def executeBulkInsert(origin_table: str,
         Copy-DbaDbTableData -Query $origin_query -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -BatchSize 100000''' +truncate_opt+ '''
         '''
     print(f'''Executed bulkInsert - {target_table}\n''')
-    p = subprocess.Popen(['powershell', executable_cmdlet], stdout=subprocess.PIPE).communicate()[0]
-    return p.decode('utf-8')
+    return _execCmdlet(executable_cmdlet)
 
 def executeQuery(execute_query,
                  target_server):
@@ -80,10 +80,22 @@ def executeQuery(execute_query,
     executable_cmdlet = cmdlet + r'''
     Invoke-DbaQuery -Query $execute_query -SqlCredential $cred -SqlInstance $target_server -QueryTimeout 36000'''
     print(f'''Executed executeQuery - {execute_query}\n''')
-    p = subprocess.Popen(['powershell', executable_cmdlet], stdout=subprocess.PIPE).communicate()[0]
-    return p.decode('utf-8')  
+    #print(executable_cmdlet)
+    return _execCmdlet(executable_cmdlet)
 
-##if __name__ == '__main__':
+def _execCmdlet(executable_cmdlet: str):
+    print(executable_cmdlet)
+    if platform == 'win32':
+        p = subprocess.Popen(['powershell', executable_cmdlet], stdout=subprocess.PIPE).communicate()[0]
+    else:
+        p = subprocess.Popen(['pwsh', "-Command", executable_cmdlet], stdout=subprocess.PIPE).communicate()[0]
+    return p.decode('utf-8')     
+
+import time
+
+# if __name__ == '__main__':
+#     t = time.time()
+#     print(executeBulkInsert("[dbo].[tab_valor_mercado_carne_osso]", "[dbo].[tab_valor_mercado_carne_osso]", 'dbsupfri', '190.1.1.2', '172.20.1.45', truncate='true'))
+#     print(time.time()-t)
 ##    deleteCurrentSnapshotDate('tab_choice_modo_conservacao_snapshot', 'dbsupfri', '172.20.1.45')    
 ##    fullBulkInsert('tab_choice_modo_conservacao', 'tab_choice_modo_conservacao_snapshot', 'dbsupfri', '190.1.1.2', '172.20.1.45')
-##

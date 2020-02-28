@@ -1,7 +1,7 @@
 from flask import Flask, request
 
-import src.server_replicator.core.BulkFunctionality as bf
-from src.server_replicator.core.BulkFunctionality import executeQuery, executeBulkInsert
+import server_replicator.core.BulkFunctionality as bf
+from server_replicator.core.BulkFunctionality import executeQuery, executeBulkInsert
 
 app = Flask(__name__)
 

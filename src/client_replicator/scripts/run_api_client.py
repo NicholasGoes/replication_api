@@ -7,13 +7,10 @@ from threading import Thread,Event
 from prettytable import PrettyTable
 from clear_screen import clear
 
-import sys
-#sys.path.append("..")
+import client_replicator.utils.convertShelltoHTML as sh
 
-import src.client_replicator.utils.convertShelltoHTML as sh
-
-from src.client_replicator.core.API_Functions import API_Functions
-from src.client_replicator.utils.perpetualTimer import perpetualTimer
+from client_replicator.core.API_Functions import API_Functions
+from client_replicator.utils.perpetualTimer import perpetualTimer
 
 
 _API_ENDPOINT = "http://172.20.1.45:5000"

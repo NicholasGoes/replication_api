@@ -1,2 +1,6 @@
 config/replication_list.csv
 config/replication_list - Markim.csv
+*/__pycache__
+.vscode/
+src/server_replicator/core/__pycache__/
+.vscode/settings.json
