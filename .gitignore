@@ -4,5 +4,7 @@ config/replication_list - Markim.csv
 src/server_replicator/core/__pycache__/
 src/client_replicator/core/__pycache__/
 src/client_replicator/utils/__pycache__/
+src/client_replicator/scripts/__pycache__/
+src/server_replicator/scripts/__pycache__/
 .vscode/settings.json
 log/*
