@@ -3,11 +3,6 @@ from time import time
 from colorama import Fore, Back, Style
 from typing import Dict, Optional
 
-# defining the api-endpoint
-#API_ENDPOINT = "http://172.20.1.45:5001/"
-#API_ENDPOINT_QUERY = "http://172.20.1.45:5001/executeBulkInsert"
-#API_ENDPOINT_DELETE = "http://172.20.1.45:5001/executeQuery"
-
 class API_Functions:
     def __init__(self, api_endpoint: str):
         self._api_endpoint = api_endpoint
@@ -85,7 +80,7 @@ class API_Functions:
             return 1, f'{Fore.GREEN}Sucess{Style.RESET_ALL}'
         else:
             if 'RowsCopied' in result_message:
-                rowscopied = result_message[result_message.find(':',result_message.find('RowsCopied'))+2:result_message.find('\n',result_message.find('RowsCopied'))-1].strip()
+                rowscopied = result_message[result_message.find(':',result_message.find('RowsCopied'))+2:result_message.find('\n',result_message.find('RowsCopied'))].strip()
                 #elapsed_time = result_message[result_message.find(':',result_message.find('Elapsed'))+1:]
                 return 1, f'{Fore.GREEN}Finished | {rowscopied} rows {Style.RESET_ALL}'
             elif "WARNING" in result_message:

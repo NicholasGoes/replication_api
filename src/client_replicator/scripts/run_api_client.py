@@ -7,13 +7,16 @@ from threading import Thread,Event
 from prettytable import PrettyTable
 from clear_screen import clear
 
-import client_replicator.utils.convertShelltoHTML as sh
+import sys
+#sys.path.append("..")
 
-from client_replicator.core.API_Functions import API_Functions
-from client_replicator.utils.perpetualTimer import perpetualTimer
+import src.client_replicator.utils.convertShelltoHTML as sh
+
+from src.client_replicator.core.API_Functions import API_Functions
+from src.client_replicator.utils.perpetualTimer import perpetualTimer
 
 
-_API_ENDPOINT = "http://172.20.1.45:5000"
+_API_ENDPOINT = "http://172.20.1.69:5000"
 
 execution_results = {}
 strftime = ''
@@ -21,22 +24,23 @@ strftime = ''
 def executeMainProcess(args): 
     database_name = args[0]
     schema_name = args[1]
-    table_name = args[2]
-    origin_server = args[3]
-    target_server = args[4] 
-    origin_query = args[5]
-    delete_query = args[6]
+    origin_table = args[2]
+    target_table = args[3]
+    origin_server = args[4]
+    target_server = args[5] 
+    origin_query = args[6]
+    delete_query = args[7]
 
     api = API_Functions(api_endpoint=_API_ENDPOINT)
 
     if len(origin_query)==0:       
-        api.executeBulkInsert(execution_results, table_name, table_name, database_name, origin_server, target_server)
+        api.executeBulkInsert(execution_results, origin_table, target_table, database_name, origin_server, target_server)
     else:
         truncate_table = 'true'
         if len(delete_query)!=0:
-           api.executeQuery(execution_results, table_name, delete_query, target_server)
+           api.executeQuery(execution_results, target_table, delete_query, target_server)
            truncate_table = 'false'
-        api.executeBulkInsert(execution_results, table_name, table_name, database_name, origin_server, target_server, origin_query, truncate_table)
+        api.executeBulkInsert(execution_results, origin_table, target_table, database_name, origin_server, target_server, origin_query, truncate_table)
     return 1
 
 def executeLogProcess():
@@ -60,11 +64,11 @@ def exportLog():
         
 if __name__ == '__main__':
     colorama.init()
-    with open('conf/replication_list_git.csv') as csv_file:
+    with open('config/replication_list.csv') as csv_file:
 
         csv_reader = csv.reader(csv_file, delimiter=';')
 
-        args = [[row[0], row[1], row[2], row[3], row[4], row[5], row[6]] for row in csv_reader]
+        args = [[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]] for row in csv_reader]
         args.pop(0)
 
         t=time.time()
