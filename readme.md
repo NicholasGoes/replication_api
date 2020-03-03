@@ -14,8 +14,9 @@ On the Client-Side, to know which tables will be replicated a CSV archive is use
 
 * database: indicate which database the origin objects are; 
 * schema: indicate which schema the origin objects are;
-* table_name: indicate which table will be used on the replication;
-* origin_server; indicate the orgin  server;
+* origin_table:indicate which table will be used to gather the data;
+* target_table: indicate which table will be used to insert the data;
+* origin_server: indicate the orgin  server;
 * target_server: indicate the target server;
 * selectQuery: indicate the query to be used to collect the origin data; **(If empty, will select all records on the table)**
 * deleteQuery: indicate the sql command to be used to delete records on the target server. **(If empty, will truncate the table)**
