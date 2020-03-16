@@ -52,12 +52,12 @@ def executeBulkInsert(origin_table: str,
 
     if origin_query is None or origin_query == '':        
         executable_cmdlet = cmdlet + r'''
-        Copy-DbaDbTableData -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -KeepNulls -BatchSize 100000''' +truncate_opt+ '''
+        Copy-DbaDbTableData -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -KeepIdentity  -BatchSize 100000''' +truncate_opt+ '''
         '''
     else:
         cmdlet = cmdlet.replace('%origin_query%', origin_query)
         executable_cmdlet = cmdlet + r'''
-        Copy-DbaDbTableData -Query $origin_query -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -BatchSize 100000''' +truncate_opt+ '''
+        Copy-DbaDbTableData -Query $origin_query -SqlCredential $cred -SqlInstance $origin_server -Destination $target_server -Database $database_name -Table $origin_table -DestinationDataBase $database_name -DestinationTable $target_table -bulkCopyTimeOut 36000 -DestinationSqlCredential $cred -KeepIdentity  -BatchSize 100000''' +truncate_opt+ '''
         '''
     print(f'''Executed bulkInsert - {target_table}\n''')
     return _execCmdlet(executable_cmdlet)
